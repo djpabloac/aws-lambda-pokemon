@@ -1,0 +1,66 @@
+service: aws-lambda-pokemon
+frameworkVersion: "3"
+
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  environment:
+    POKEMON_API: ${env:POKEMON_API}
+    DYNAMODB_TABLENAME: ${env:DYNAMODB_TABLENAME}
+    AWS_REGION: ${env:AWS_REGION}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource: "arn:aws:dynamodb:${aws:region}:*:table/${self:provider.environment.DYNAMODB_TABLENAME}"
+
+functions:
+  finderPokemon:
+    handler: src/functions/finder-pokemon.handler
+    events:
+      - http:
+          method: GET
+          path: /pokemon/byId/{id}
+  createPokemon:
+    handler: src/functions/create-pokemon.handler
+    events:
+      - http:
+          method: POST
+          path: /pokemon/{id}
+
+plugins:
+  - serverless-esbuild
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    httpPort: 9004
+  esbuild:
+    bundle: true
+    minify: true
+
+# resources:
+#   Resources:
+#     pokemonsTable:
+#       Type: AWS::DynamoDB::Table
+#       DeletionPolicy: Retain
+#       Properties:
+#         TableName: ${self:provider.environment.DYNAMODB_TABLENAME}
+#         AttributeDefinitions:
+#           - AttributeName: id
+#             AttributeType: S
+#         KeySchema:
+#           - AttributeName: id
+#             KeyType: HASH
+#         ProvisionedThroughput:
+#           ReadCapacityUnits: 1
+#           WriteCapacityUnits: 1
