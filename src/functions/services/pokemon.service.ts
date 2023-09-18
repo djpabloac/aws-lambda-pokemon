@@ -21,18 +21,27 @@ export class PokemonService {
       location_area_encounters: pokemonExternal.location_area_encounters,
       name: pokemonExternal.name,
       order: pokemonExternal.order,
-      weight: pokemonExternal.weight
+      weight: pokemonExternal.weight,
+      sourceId: pokemonExternal.id.toString()
     }
   }
 
   async getById(finderPokemonDto: FinderPokemonDto): Promise<Pokemon> {
     const pokemon = await this.pokemonRepository.getById(finderPokemonDto.id)
 
+    if(!pokemon)
+      throw new Error('Pokemon not found')
+
     return pokemon
   }
 
   async createById(createPokemonDto: CreatePokemonDto): Promise<Pokemon> {
     const pokemonExternal = await this.pokemonDataSource.getById(createPokemonDto.id)
+
+    const existsPokemon = await this.pokemonRepository.exists(pokemonExternal.name)
+
+    if(existsPokemon)
+      throw new Error(`Exists pokemon ${pokemonExternal.name}`)
 
     const newPokemon = this.toMapPokemon(pokemonExternal)
 

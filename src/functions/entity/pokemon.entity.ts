@@ -7,4 +7,5 @@ export interface Pokemon {
   name: string;
   order: number;
   weight: number;
+  sourceId: string;
 }

@@ -16,7 +16,7 @@ export const handler: APIGatewayProxyHandler = async(event) => {
       return errorHandler(finderPokemonSafe.error)
 
     // Get dataSource
-    const dataSource = new DataSource(`${config.apiExternal.pokemonApi}/api/v2/pokemon`)
+    const dataSource = new DataSource(config.apiExternal.pokemonApi)
 
     // Get pokemonDataSource
     const pokemonDataSource = new PokemonDataSource(dataSource)
