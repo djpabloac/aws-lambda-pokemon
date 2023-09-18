@@ -9,7 +9,6 @@ provider:
   environment:
     POKEMON_API: ${env:POKEMON_API}
     DYNAMODB_TABLENAME: ${env:DYNAMODB_TABLENAME}
-    AWS_REGION: ${env:AWS_REGION}
   iam:
     role:
       statements:

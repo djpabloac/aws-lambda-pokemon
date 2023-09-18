@@ -5,7 +5,7 @@ import { config } from "../config";
 import { DataSource } from "../config/datasource";
 import { CreatePokemonDtoSchema } from "./dto/create-pokemon.dto";
 import { PokemonDataSource } from "./datasource/pokemon.datasource";
-import pokemonDynamoRepository from "./repository/pokemon.dynamo.repository";
+import pokemonDynamoDBRepository from "./repository/pokemon.dynamodb.repository";
 import { PokemonService } from "./services/pokemon.service";
 
 export const handler: APIGatewayProxyHandler = async (event) => {
@@ -23,7 +23,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
 
     // Get Services
     const pokemonService = new PokemonService(
-      pokemonDynamoRepository,
+      pokemonDynamoDBRepository,
       pokemonDataSource
     )
 

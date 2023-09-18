@@ -5,7 +5,7 @@ import { config } from "../config";
 import { DataSource } from "../config/datasource";
 import { FinderPokemonDtoSchema } from "./dto/finder-pokemon.dto";
 import { PokemonService } from "./services/pokemon.service";
-import pokemonDynamonRepository from "./repository/pokemon.dynamo.repository";
+import pokemonDynamonDBRepository from "./repository/pokemon.dynamodb.repository";
 import { PokemonDataSource } from "./datasource/pokemon.datasource";
 
 export const handler: APIGatewayProxyHandler = async(event) => {
@@ -23,7 +23,7 @@ export const handler: APIGatewayProxyHandler = async(event) => {
 
     // Get Services
     const pokemonService = new PokemonService(
-      pokemonDynamonRepository,
+      pokemonDynamonDBRepository,
       pokemonDataSource
     )
 

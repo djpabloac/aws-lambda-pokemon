@@ -1,9 +1,9 @@
 import { config } from "../../config";
-import { dynamoDB } from "../../config/dynamo";
+import { dynamoDB } from "../../config/dynamodb";
 import { Pokemon } from "../entity/pokemon.entity";
 import IPokemonRepository from "../entity/pokemon.repository";
 
-class PokemonDynamoRepository implements IPokemonRepository {
+class PokemonDynamoDBRepository implements IPokemonRepository {
   async getById(id: string): Promise<Pokemon> {
     const pokemon = await dynamoDB
       .get({
@@ -44,4 +44,4 @@ class PokemonDynamoRepository implements IPokemonRepository {
   }
 }
 
-export default new PokemonDynamoRepository()
+export default new PokemonDynamoDBRepository()

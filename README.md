@@ -9,8 +9,6 @@ To run this project, you will need to add the following environment variables to
 
 `DYNAMODB_TABLENAME`
 
-`AWS_REGION`
-
 ## Getting Started
 
 Run the following commands (Local):
