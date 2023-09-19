@@ -25,7 +25,8 @@
     "test": "jest"
   },
   "dependencies": {
-    "aws-sdk": "^2.1459.0",
+    "@aws-sdk/client-dynamodb": "^3.414.0",
+    "@aws-sdk/util-dynamodb": "^3.415.0",
     "cross-fetch": "^4.0.0",
     "zod": "^3.22.2"
   },

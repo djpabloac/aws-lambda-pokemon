@@ -1,27 +1,32 @@
+// import { AttributeValue } from "@aws-sdk/client-dynamodb";
+import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { config } from "../../config";
-import { dynamoDB } from "../../config/dynamodb";
+import dynamoDB from "../../config/dynamodb";
 import { Pokemon } from "../entity/pokemon.entity";
 import IPokemonRepository from "../entity/pokemon.repository";
 
 class PokemonDynamoDBRepository implements IPokemonRepository {
-  async getById(id: string): Promise<Pokemon> {
+  async getById(id: string): Promise<Pokemon | null> {
     const pokemon = await dynamoDB
       .get({
         TableName: config.db.dynamonDb.tables.pokemons,
-        Key: { id }
+        Key: {
+          "id": { 'S': id }
+        }
       })
-      .promise()
 
-    return pokemon.Item as Pokemon
+    if (!pokemon?.Item)
+      return null
+
+    return unmarshall(pokemon.Item) as Pokemon
   }
 
   async create(pokemon: Pokemon): Promise<Pokemon> {
     await dynamoDB
       .put({
         TableName: config.db.dynamonDb.tables.pokemons,
-        Item: pokemon
+        Item: marshall(pokemon)
       })
-      .promise()
 
     return pokemon
   }
@@ -33,12 +38,11 @@ class PokemonDynamoDBRepository implements IPokemonRepository {
         ExpressionAttributeNames: {
           '#name': 'name'
         },
-        ExpressionAttributeValues: {
+        ExpressionAttributeValues: marshall( {
           ":name": name
-        },
+        }),
         FilterExpression: "#name = :name"
       })
-      .promise()
 
     return Boolean(pokemon.Items?.length)
   }
